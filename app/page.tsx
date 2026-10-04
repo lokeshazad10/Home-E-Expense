@@ -10,12 +10,7 @@ const categoryStyles: Record<Category, { icon: typeof Home; color: string; soft:
   Housing: { icon: Home, color: 'text-[#315c4c]', soft: 'bg-[#e4f0e9]' }, Food: { icon: Utensils, color: 'text-[#bb6b35]', soft: 'bg-[#faeadc]' }, Utilities: { icon: Zap, color: 'text-[#846d22]', soft: 'bg-[#f5efd0]' }, Transport: { icon: TrendingUp, color: 'text-[#7162a4]', soft: 'bg-[#ebe7f8]' }, Health: { icon: CircleDollarSign, color: 'text-[#a04f62]', soft: 'bg-[#f8e3e8]' }, Other: { icon: ReceiptText, color: 'text-[#65717d]', soft: 'bg-[#e9edf0]' },
 }
 
-const starterExpenses: Expense[] = [
-  { id: 1, title: 'Monthly rent', amount: 18500, date: '2026-10-01', category: 'Housing' },
-  { id: 2, title: 'Groceries', amount: 1246.8, date: '2026-10-02', category: 'Food' },
-  { id: 3, title: 'Electric bill', amount: 862, date: '2026-10-03', category: 'Utilities' },
-  { id: 4, title: 'Gas & parking', amount: 725, date: '2026-10-04', category: 'Transport' },
-]
+const starterExpenses: Expense[] = []
 
 const money = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 })
 
