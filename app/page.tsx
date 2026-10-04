@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CalendarDays, CircleDollarSign, Download, Home, Plus, ReceiptText, Search, Trash2, TrendingUp, Utensils, Zap } from 'lucide-react'
 
 type Category = 'Housing' | 'Food' | 'Utilities' | 'Transport' | 'Health' | 'Other'
@@ -27,6 +27,11 @@ export default function Page() {
   const [date, setDate] = useState('2026-10-04')
   const [category, setCategory] = useState<Category>('Housing')
   const [query, setQuery] = useState('')
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => undefined)
+  }, [])
+
   const total = expenses.reduce((sum, expense) => sum + expense.amount, 0)
   const filteredExpenses = expenses.filter((expense) => `${expense.title} ${expense.category}`.toLowerCase().includes(query.toLowerCase()))
   const categoryTotals = useMemo(() => (Object.keys(categoryStyles) as Category[]).map((categoryName) => ({ name: categoryName, total: expenses.filter((expense) => expense.category === categoryName).reduce((sum, expense) => sum + expense.amount, 0) })).filter((item) => item.total > 0).sort((a, b) => b.total - a.total), [expenses])
