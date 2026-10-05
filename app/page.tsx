@@ -67,9 +67,9 @@ export default function Page() {
     context.font = '22px Arial'; context.fillText(`Expense statement${name.trim() ? ` for ${name.trim()}` : ''}`, 70, 115)
     context.fillStyle = '#202522'; context.font = 'bold 30px Arial'; context.fillText('Home expenses', 70, 220)
     context.font = '22px Arial'; context.fillStyle = '#65717d'; context.fillText(new Date().toLocaleDateString('en-IN'), 940, 220)
-    let y = 290; context.font = 'bold 18px Arial'; context.fillStyle = '#65717d'; context.fillText('ITEM', 70, y); context.fillText('CATEGORY', 570, y); context.fillText('AMOUNT', 950, y)
+    let y = 290; context.font = 'bold 18px Arial'; context.fillStyle = '#65717d'; context.fillText('ITEM', 70, y); context.fillText('CATEGORY', 410, y); context.fillText('DATE', 690, y); context.fillText('AMOUNT', 950, y)
     context.font = '20px Arial'; context.fillStyle = '#202522'
-    expenses.forEach((expense) => { y += 58; context.fillText(expense.title.slice(0, 36), 70, y); context.fillStyle = '#65717d'; context.fillText(expense.category, 570, y); context.fillStyle = '#202522'; context.fillText(money.format(expense.amount), 950, y) })
+    expenses.forEach((expense) => { y += 58; context.fillText(expense.title.slice(0, 28), 70, y); context.fillStyle = '#65717d'; context.fillText(expense.category, 410, y); context.fillText(new Date(`${expense.date}T12:00:00`).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }), 690, y); context.fillStyle = '#202522'; context.fillText(money.format(expense.amount), 950, y) })
     y += 80; context.fillStyle = '#315c4c'; context.fillRect(70, y - 35, 1060, 2); context.font = 'bold 28px Arial'; context.fillText('Grand total', 70, y + 25); context.fillText(money.format(total), 950, y + 25)
     const link = document.createElement('a'); link.download = 'lokesh-expense-statement.png'; link.href = canvas.toDataURL('image/png'); link.click()
   }
