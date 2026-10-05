@@ -10,13 +10,12 @@ const categoryStyles: Record<Category, { icon: typeof Home; color: string; soft:
   Housing: { icon: Home, color: 'text-[#315c4c]', soft: 'bg-[#e4f0e9]' }, Food: { icon: Utensils, color: 'text-[#bb6b35]', soft: 'bg-[#faeadc]' }, Utilities: { icon: Zap, color: 'text-[#846d22]', soft: 'bg-[#f5efd0]' }, Transport: { icon: TrendingUp, color: 'text-[#7162a4]', soft: 'bg-[#ebe7f8]' }, Health: { icon: CircleDollarSign, color: 'text-[#a04f62]', soft: 'bg-[#f8e3e8]' }, Other: { icon: ReceiptText, color: 'text-[#65717d]', soft: 'bg-[#e9edf0]' },
 }
 
-const starterExpenses: Expense[] = []
-
 const money = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 })
 
 export default function Page() {
-  const [expenses, setExpenses] = useState<Expense[]>(starterExpenses)
+  const [expenses, setExpenses] = useState<Expense[]>([])
   const [name, setName] = useState('')
+  const [hasLoadedSavedData, setHasLoadedSavedData] = useState(false)
   const [title, setTitle] = useState('')
   const [amount, setAmount] = useState('')
   const [date, setDate] = useState('2026-10-04')
@@ -25,7 +24,27 @@ export default function Page() {
 
   useEffect(() => {
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => undefined)
+
+    try {
+      const savedExpenses = window.localStorage.getItem('lokesh-expense-tracker-expenses')
+      const savedName = window.localStorage.getItem('lokesh-expense-tracker-name')
+      if (savedExpenses) {
+        const parsedExpenses = JSON.parse(savedExpenses)
+        if (Array.isArray(parsedExpenses)) setExpenses(parsedExpenses)
+      }
+      if (savedName) setName(savedName)
+    } catch {
+      // Ignore unavailable or malformed browser storage and keep the empty tracker usable.
+    } finally {
+      setHasLoadedSavedData(true)
+    }
   }, [])
+
+  useEffect(() => {
+    if (!hasLoadedSavedData) return
+    window.localStorage.setItem('lokesh-expense-tracker-expenses', JSON.stringify(expenses))
+    window.localStorage.setItem('lokesh-expense-tracker-name', name)
+  }, [expenses, name, hasLoadedSavedData])
 
   const total = expenses.reduce((sum, expense) => sum + expense.amount, 0)
   const filteredExpenses = expenses.filter((expense) => `${expense.title} ${expense.category}`.toLowerCase().includes(query.toLowerCase()))
